@@ -41,15 +41,11 @@ tailf -n "$h" "$outfile" | while IFS= read -r line
 do
 	unset date time nick mesg ctcp
 
-	date="${line%% *}" line="${line#* }"
 	time="${line%% *}" line="${line#* }"
 	nick="${line%% *}" line="${line#* }"
 
-	# strip '<nick>' to 'nick'
-	nick="${nick#<}" nick="${nick%>}"
-
-	# do not notify of server, frigg, pancakes or GitHub (bots) messages
-	case "$nick" in -!-|frigg|pancakes|feepbot|[Gg]it[Hh]ub*) ;; *) tput bel ;; esac
+	# do not notify of server messages
+	case "$nick" in -!-) ;; *) tput bel ;; esac
 
 	# prettify
 	if [ "$p" -ne 0 ]
@@ -71,7 +67,7 @@ do
 		clrmesg="$reset"
 
 		# dark color for special nicks
-		case "$nick" in -!-|frigg|pancakes|feepbot|[Gg]it[Hh]ub*) clrnick="$dark" clrmesg="$dark";; esac
+		case "$nick" in -!-) clrnick="$dark" clrmesg="$dark";; esac
 	fi
 
 	# handle CTCP messages
@@ -81,6 +77,7 @@ do
 		line="${line%}"
 		ctcp="${line%% *}"
 		line="${line#* }"
+        	nick="${nick#<}" nick="${nick%>}"
 
 		if [ "$ctcp" != 'ACTION' ]
 		then line="${clrnick}[CTCP:${ctcp}]${clrmesg} ${line}"
@@ -91,7 +88,7 @@ do
 	# fold lines breaking on spaces if message is greater than 'w' chars or does not fit
 	mw="$(($(tput cols) - ${#time} - $m - 5))"
 	[ "$mw" -gt "$w" ] && mw="$w"
-	printf '%s\n' "$line" | fold -s -w "$mw" | while IFS= read -r mesg; \
+	printf '%s\n' "$line" | while IFS= read -r mesg; \
 	do
 		[ "$p" -gt 1 ] && mesg="$(echo "$mesg" | sed \
 			-e "s,\(^\|[[:space:]][[:punct:]]*\)\([_][[:alnum:][:punct:]]\+[_]\)\([[:punct:][:space:]]\|$\),\1${su}\2${eu}\3,g" \
@@ -101,11 +98,11 @@ do
 			-e "s,\(^\|[[:space:]][[:punct:]]*\)\([*][[:alnum:][:punct:]]\+[*]\)\([[:punct:][:space:]]\|$\),\1${sb}\2${eb}\3,g" \
 			-e "s,\(^\|[[:space:]][[:punct:]]*\)\([*][[:alnum:][:punct:]]\+[*]\)\([[:punct:][:space:]]\|$\),\1${sb}\2${eb}\3,g")"
 
-		printf '\r%s%s %s%*.*s %s%s %s%s%s\n' \
-			"${clrdate}" "${time}"               \
-			"${clrnick}" "${m}" "${m}" "${nick}" \
-			"${clrsepr}" "${sepr}"               \
+		printf '\r%s%s %s%s %s%s %s%s%s\n' \
+			"${clrdate}" "[$(date -d@${time} '+%T')]" \
+			"${clrnick}" "${nick}" \
 			"${clrmesg}" "${mesg}" "${reset}"
+
 	done
 done &
 
