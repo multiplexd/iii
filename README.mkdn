@@ -6,15 +6,13 @@ iii
 it outputs text, formatted, and colored, and allows for some configuration.
 options are passed as enviromental variables.
 
-    u: the user's nickname
+    n: the user's nickname
     i: the root directory [default: $HOME/irc]
-    n: the network in which the channel resides [default: irc.oftc.net]
+    s: the network in which the channel resides [default: irc.oftc.net]
     c: the channel to interact with [default: none - the network view]
     m: max length for nicks [default: 12]
     h: the number of lines to include from history [default: 20]
-    s: the separator between the nick and the message
     r: randomization of nick colors
-    l: the highlight color when nick is mentioned
 
 typical usage would be:
 
@@ -52,32 +50,6 @@ notifiii
 notifiii.sh /tmp/irc
 ```
 
-connect
--------
-
-`connect` is a script to automatically connect `ii`/`iim` to the specified networks and channels.
-in addition, it knows when the connection was dropped and automatically tries to reconnect.
-moreover, given a file named `ident`, containing the identification passphrase of the user,
-it sends an identify command to the _nickserv_, to automatically identify the connected user.
-the `ident` file should be under `/path/to/irc/dir/network/`
-
-as above `connect` accepts two arguments in the form of env vars,
-`nick` which sets the user's nickname, else it will use `$USER`,
-and `ircdir` which specifies the base irc directory.
-
-``` sh
-$  freenode=foo oftc=bar connect.sh
-$ ^ notice the extra space here
-$ this serves as to ignore the command from being saved in the shell history
-$ one should also close the terminal or clear the scrollback buffer
-$ so that the command cannot be seen on scroll up
-```
-
-edit this script to add the networks you'd like to autoconnect as a function,
-which sets the server name, the channels on that server to autoconnect as a
-list of strings separated by a space, and the port to use for the connection.
-add your network to the `networks` list, and you're set.
-
 dependencies
 ------------
 
@@ -113,3 +85,4 @@ see UNLICENSE file and [unlicense.org](http://unlicense.org/) for more informati
 original hacks by [Ivan c00kiemon5ter V Kanakarakis](http://c00kiemon5ter.github.com).
 if you have cookies, share :]
 
+more recent hacks and gutting of the rendering engine (such as it is) by multiplexd
