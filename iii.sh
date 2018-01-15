@@ -23,7 +23,7 @@ sepr='|'
 
 # colors
 reset="$(tput sgr0)"
-dark="$(tput setaf 8)"
+dark="$(tput setaf 7)"
 highlight="$(tput setaf 3)"
 
 # markup
