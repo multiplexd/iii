@@ -31,9 +31,12 @@ like `/op` `/deop` `/ban` `/unban` `/names` `/wi`
 tmiii
 -----
 
-`tmiii` is a wrapper to `iii` to spawn `iii` instances inside a `tmux` session named *IRC*.
-each `iii` instance inside `tmux` is on each own window, named by the channel it shows.
-`tmiii` acceps the same env vars as `iii` plus `t` to set the TERM variable, used by `tmux`.
+`tmiii` is a wrapper to `iii` to spawn `iii` instances inside a `tmux` session named whose
+name is *IRC-$network*, where *$network* is the name of the network that the channel is on
+(e.g. running `tmiii` on a channel on `irc.freenode.net` will spawn the `iii` instance in a
+`tmux` session named `IRC-irc.freenode.net`). each `iii` instance inside `tmux` is on each
+own window, named by the channel it shows. `tmiii` acceps the same env vars as `iii` plus
+`t` to set the TERM variable, used by `tmux`.
 
 ``` sh
 l=false h=50 n=irc.freenode.net c=#cat-v tmiii.sh
@@ -42,9 +45,13 @@ l=false h=50 n=irc.freenode.net c=#cat-v tmiii.sh
 notifiii
 --------
 
-`notifiii` monitors a hierarchy of files and automatically spawns a terminal running `iii` with the channel that got activity.
-`notifiii` by default ignores joins, parts, quits and any message from the network (user `-!-`).
-`notifiii` accepts the irc root directory - by default `$HOME/irc` - to monitor as an argument.
+`notifiii` monitors a hierarchy of files and automatically spawns a terminal running `iii`
+with the channel that got activity. `notifiii` by default ignores joins, parts, quits and
+any message from the network (user `-!-`). `notifiii` accepts the irc root directory - by
+default `$HOME/irc` - to monitor as an argument. if the network directory under the irc root
+directory contains a file called `nick` (e.g. `$HOME/irc/irc.freenode.net/nick`), then
+`notifiii` will set the nickname environment variable to the contents of this file (so that
+different nicknames on different networks will be highlighted correctly).
 
 ``` sh
 notifiii.sh /tmp/irc

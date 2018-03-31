@@ -32,6 +32,8 @@ inotifywait -m --exclude "/in$" --format "%w %f" -e modify -r "$i" | \
 
 		opts="h=20 i="$i" s="$s" c="$c""
 
+		[ -r "$i/$s/nick" ] && n=$(cat "$i/$s/nick") && opts="$opts n=$n"
+
 		## spawn a new tmux window named <channel> in a tmux session named IRC
 		env $opts tmiii.sh
 
