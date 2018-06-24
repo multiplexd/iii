@@ -9,6 +9,9 @@
 ## collect options from env - all opts to iii.sh should be set here
 opts="TERM="${t:-rxvt-unicode}" m="$m" h="$h" p="$p" n="$n" l="$l" i="$i" s="$s" c="$c""
 
+## make the server name safe to use with tmux
+s=$(echo $s | tr '.' '/')
+
 ## spawn a new tmux window named <channel> in a tmux session named IRC
 if ! tmux list-sessions | awk -v r=1 '$1 == "IRC-'"$s"':" { exit r=0 } END { exit r }'
 then tmux new-session -s "IRC-$s" -n "${c:-$s}" -d "$opts iii.sh"

@@ -32,11 +32,12 @@ tmiii
 -----
 
 `tmiii` is a wrapper to `iii` to spawn `iii` instances inside a `tmux` session named whose
-name is *IRC-$network*, where *$network* is the name of the network that the channel is on
-(e.g. running `tmiii` on a channel on `irc.freenode.net` will spawn the `iii` instance in a
-`tmux` session named `IRC-irc.freenode.net`). each `iii` instance inside `tmux` is on each
-own window, named by the channel it shows. `tmiii` acceps the same env vars as `iii` plus
-`t` to set the TERM variable, used by `tmux`.
+name is *IRC-$network*, where *$network* is the name of the network that the channel is on,
+with periods in the name replaced by slashes (as tmux uses a period character to denote
+pane id). running `tmiii` on a channel on `irc.freenode.net` will spawn the `iii` instance
+in a `tmux` session named `IRC-irc/freenode/net`. each `iii` instance inside `tmux` is in
+its own window, named by the channel it shows. `tmiii` acceps the same env vars as `iii`
+plus `t` to set the TERM variable, used by `tmux`.
 
 ``` sh
 l=false h=50 n=irc.freenode.net c=#cat-v tmiii.sh
@@ -69,7 +70,8 @@ dependencies
 bugs
 ----
 
- * inotify is not portable - linux only interface.
+ * inotify is not portable - linux only interface. (emulation wrappers are available
+   on other platforms, however)
 
 related
 -------
