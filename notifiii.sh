@@ -6,6 +6,7 @@
 # and spawns tmiii.sh or a new urxvt terminal with the chanel that had activity
 
 i="${1:-$HOME/irc}"
+h="${h:-50}"
 GREP_OPTIONS=""
 
 trap 'kill -TERM -0' EXIT
@@ -30,7 +31,7 @@ inotifywait -m --exclude "/in$" --format "%w %f" -e modify -r "$i" | \
 		# if server is empty then action is on the server view
 		[ -z "$s" ] && s="$c" c=""
 
-		opts="h=20 i="$i" s="$s" c="$c""
+		opts="h="$h" i="$i" s="$s" c="$c""
 
 		[ -r "$i/$s/nick" ] && n=$(cat "$i/$s/nick") && opts="$opts n=$n"
 
