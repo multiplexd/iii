@@ -37,7 +37,7 @@ ei="$(tput ritm; tput sgr0)"
 [ -p "$infile"  ] || exit 1
 [ -e "$outfile" ] || { touch "$outfile" || exit 1; }
 
-tailf -n "$h" "$outfile" | while IFS= read -r line
+tail -f -n "$h" "$outfile" | while IFS= read -r line
 do
 	unset date time nick mesg ctcp
 
@@ -54,6 +54,15 @@ do
 
 		clrdate="$dark"
 		case "$line" in *"$n"*) clrdate="$highlight" ;; esac
+
+		# process highlight list
+		if [ -n "$l" -a -f "$l" -a -r "$l" ]
+		then
+			while IFS= read -r hl_line
+			do
+				case "$line" in *"$hl_line"*) clrdate="$highlight" ;; esac
+			done < "$l"
+		fi
 
 		tmpnick="${nick%[_12]}"
 		clrnick="$(printf '(%d ^ %d + %d + %d)' "${#tmpnick}" "'${tmpnick}" "'${tmpnick#?}" "'${tmpnick#??}")"

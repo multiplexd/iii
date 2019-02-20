@@ -33,9 +33,14 @@ inotifywait -m --exclude "/in$" --format "%w %f" -e modify -r "$i" | \
 
 		opts="h="$h" i="$i" s="$s" c="$c""
 
-		[ -r "$i/$s/nick" ] && n=$(cat "$i/$s/nick") && opts="$opts n=$n"
+		[ -f "$i/$s/nick" ] && [ -r "$i/$s/nick" ] && n=$(cat "$i/$s/nick") && opts="$opts n=$n"
 
-		## spawn a new tmux window named <channel> in a tmux session named IRC
+		# check for a highlight list, first channel specific and then server specific
+		[ -f "$i/$s/$c/highlight" -a -r "$i/$s/$c/highlight" ] && l="$i/$s/$c/highlight"
+		[ -f "$i/$s/highlight" -a -r "$i/$s/highlight" ] && l="$i/$s/highlight"
+		[ -n "$l" ] && opts="$opts l=$l"
+
+		## spawn a new tmux window named <channel> in a tmux session named IRC-${server}
 		env $opts tmiii.sh
 
 		# ## spawn a new urxvt terminal with IRC-<channel> class name
