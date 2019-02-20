@@ -35,9 +35,9 @@ inotifywait -m --exclude "/in$" --format "%w %f" -e modify -r "$i" | \
 
 		[ -f "$i/$s/nick" ] && [ -r "$i/$s/nick" ] && n=$(cat "$i/$s/nick") && opts="$opts n=$n"
 
-		# check for a highlight list, first channel specific and then server specific
-		[ -f "$i/$s/$c/highlight" -a -r "$i/$s/$c/highlight" ] && l="$i/$s/$c/highlight"
+		# check for a highlight list, first server specific and then channel specific
 		[ -f "$i/$s/highlight" -a -r "$i/$s/highlight" ] && l="$i/$s/highlight"
+		[ -f "$i/$s/$c/highlight" -a -r "$i/$s/$c/highlight" ] && l="$i/$s/$c/highlight"
 		[ -n "$l" ] && opts="$opts l=$l"
 
 		## spawn a new tmux window named <channel> in a tmux session named IRC-${server}
