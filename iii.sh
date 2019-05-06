@@ -55,15 +55,6 @@ do
 		clrdate="$dark"
 		case "$line" in *"$n"*) clrdate="$highlight" ;; esac
 
-		# process highlight list
-		if [ -n "$l" -a -f "$l" -a -r "$l" ]
-		then
-			while IFS= read -r hl_line
-			do
-				case "$line" in *"$hl_line"*) clrdate="$highlight" ;; esac
-			done < "$l"
-		fi
-
 		tmpnick="${nick%[_12]}"
 		clrnick="$(printf '(%d ^ %d + %d + %d)' "${#tmpnick}" "'${tmpnick}" "'${tmpnick#?}" "'${tmpnick#??}")"
 
